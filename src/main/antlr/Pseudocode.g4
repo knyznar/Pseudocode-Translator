@@ -1,7 +1,7 @@
 grammar Pseudocode;
 
 //////////////////////////////////////////////////// PARSER RULES ////////////////////////////////////////////////////
-compilationUnit : statement+ EOF; // root rule
+start : statement+ EOF; // root rule
 statement : if_statement | variable_declaration | print; // | for_statement | while_statement | func_def;
 //for_statement : ;  //TODO
 if_statement :  IF LEFT_ROUND_BRACKET boolean_expression RIGHT_ROUND_BRACKET trueStatement=statement (ELSE falseStatement=statement)?;

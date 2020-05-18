@@ -21,6 +21,7 @@ dependencies {
 generateGrammarSource {
     maxHeapSize = "64m"
     arguments += ['-package', 'translator.MarkupParser']
+    arguments += ["-visitor", "-long-messages"]
     outputDirectory = new File("generated-src/antlr/main/translator/MarkupParser".toString())
 }
 compileJava.dependsOn generateGrammarSource
