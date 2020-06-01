@@ -1,13 +1,14 @@
 grammar Pseudocode;
 
 //////////////////////////////////////////////////// PARSER RULES ////////////////////////////////////////////////////
-start : statement+ EOF; // root rule
+start : statement+ EOF ; // root rule
 statement : if_statement | variable_declaration | print | for_statement | while_statement ;
-for_statement : FOR '(' for_conditions ')' '{' statement* '}';
-if_statement :  IF '(' boolean_expression ')' '{' statement* '}' (ELSE '{' statement* '}')?;
-while_statement : WHILE '(' boolean_expression  ')' '{' statement* '}';
-print : PRINT LEFT_ROUND_BRACKET STRING_LITERAL RIGHT_ROUND_BRACKET  ;
-type : BOOL | STRING | CHAR | INT | VOID | FLOAT;
+for_statement : FOR '(' for_conditions ')' '{' statement* '}' ;
+if_statement :  IF '(' boolean_expression ')' '{' statement* '}' (ELSE '{' statement* '}')? ;
+while_statement : WHILE '(' boolean_expression  ')' '{' statement* '}' ;
+print : PRINT LEFT_ROUND_BRACKET string RIGHT_ROUND_BRACKET  ;
+string : STRING_LITERAL ;
+type : BOOL | STRING | CHAR | INT | VOID | FLOAT ;
 variable_declaration
     : type IDENTIFIER ASSIGN INTEGER_LITERAL | FLOATING_POINT_LITERAL | STRING_LITERAL | BOOL_LITERAL
     | type IDENTIFIER
@@ -45,11 +46,11 @@ boolean_expression
     ;
 
 expression
-    : primary_expression math_operator primary_expression (math_operator primary_expression)*;
+    : primary_expression math_operator primary_expression (math_operator primary_expression)* ;
 
-primary_expression : IDENTIFIER | NUMBER_LITERAL;
+primary_expression : IDENTIFIER | NUMBER_LITERAL ;
 
-math_operator : ADD | SUB | MUL | DIV | MOD;
+math_operator : ADD | SUB | MUL | DIV | MOD ;
 
 
 //////////////////////////////////////////////////// LEXER RULES (tokens) ////////////////////////////////////////////////////
@@ -105,14 +106,14 @@ fragment LETTER_OR_DIGIT : [a-zA-Z0-9_] ;
 //constants
 fragment QUOTE : '"' ;
 fragment MINUS : '-' ;
-fragment FLOATING_POINT_SEPARATOR : '.';
+fragment FLOATING_POINT_SEPARATOR : '.' ;
 
 // Literals
 INTEGER_LITERAL : MINUS? DECIMAL_NUMERAL ;
 FLOATING_POINT_LITERAL : MINUS? DECIMAL_NUMERAL FLOATING_POINT_SEPARATOR DECIMAL_NUMERAL? ;
 NUMBER_LITERAL :INTEGER_LITERAL | FLOATING_POINT_LITERAL;
 STRING_LITERAL : QUOTE ~('\n' | '\r' | '"')* QUOTE ;
-BOOL_LITERAL :  'true' | 'false';
+BOOL_LITERAL :  'true' | 'false' ;
 
 fragment DEC_DIGIT : [0-9] ;
 fragment DECIMAL_NUMERAL

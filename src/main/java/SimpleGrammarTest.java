@@ -10,13 +10,17 @@ public class SimpleGrammarTest {
         simpleGrammarTest.parse();
     }
     public void parse() {
-        String exampleCode = "1+2";
+        String exampleCode = "print(\"aaa\")";
         PseudocodeLexer lexer = new PseudocodeLexer(new ANTLRInputStream(exampleCode));
         CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
         PseudocodeParser parser = new PseudocodeParser(commonTokenStream);
-        parser.setBuildParseTree(true);
+//        parser.setBuildParseTree(true);
 
         ParseTree tree = parser.start();
+        System.out.println(tree.toStringTree());
+        System.out.println("BREAK");
 
+        PVisitor pVisitor = new PVisitor();
+        System.out.println(pVisitor.visit(tree));
     }
 }
