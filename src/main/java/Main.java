@@ -1,8 +1,9 @@
 import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
+
+import org.antlr.v4.runtime.tree.*;
 import translator.MarkupParser.PseudocodeLexer;
 import translator.MarkupParser.PseudocodeParser;
-import org.antlr.v4.runtime.tree.*;
 
 import java.io.File;
 import java.io.IOException;
@@ -10,9 +11,9 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 
 
-public class SimpleGrammarTest {
+public class Main {
     public static void main(String[] args) throws IOException {
-        SimpleGrammarTest simpleGrammarTest = new SimpleGrammarTest();
+        Main simpleGrammarTest = new Main();
         File inputFile = new File("input.txt");
         simpleGrammarTest.parse(inputFile);
     }
