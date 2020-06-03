@@ -1,21 +1,22 @@
 grammar Pseudocode;
 
 //////////////////////////////////////////////////// PARSER RULES ////////////////////////////////////////////////////
-start : statement+ EOF ; // root rule
+start : statement+ eof ; // root rule
 statement : if_statement | variable_declaration | print | for_statement | while_statement ;
-for_statement : FOR '(' for_conditions ')' '{' statement* '}' ;
-if_statement :  IF '(' boolean_expression ')' '{' statement* '}' (ELSE '{' statement* '}')? ;
-while_statement : WHILE '(' boolean_expression  ')' '{' statement* '}' ;
+for_statement : FOR '(' for_conditions ')' '{' if_or_loop_body '}' ;
+if_statement :  IF '(' boolean_expression ')' '{' trueStatement=if_or_loop_body '}' (ELSE '{' falseStatement=if_or_loop_body '}')? ;
+while_statement : WHILE '(' boolean_expression  ')' '{' if_or_loop_body '}' ;
+if_or_loop_body : statement* ;
 print : PRINT LEFT_ROUND_BRACKET string RIGHT_ROUND_BRACKET  ;
 string : STRING_LITERAL ;
 type : BOOL | STRING | CHAR | INT | VOID | FLOAT ;
 variable_declaration
-    : type IDENTIFIER ASSIGN INTEGER_LITERAL | FLOATING_POINT_LITERAL | STRING_LITERAL | BOOL_LITERAL
+    : type IDENTIFIER ASSIGN literal
     | type IDENTIFIER
     ;
 for_conditions
-    : IDENTIFIER '=' INTEGER_LITERAL ':' INTEGER_LITERAL
-    | IDENTIFIER '=' INTEGER_LITERAL ':' expression
+    : IDENTIFIER '=' INTEGER_LITERAL ':' INTEGER_LITERAL    // ex. for(a = 0 : 10)
+    | IDENTIFIER '=' INTEGER_LITERAL ':' expression         // ex. for(a = 0 : b+c)
     ;
 boolean_expression
     : expression GT expression      // ex. a+b > c+d
@@ -42,6 +43,7 @@ boolean_expression
     | primary_expression AND primary_expression
     | primary_expression OR primary_expression
     | NOT primary_expression
+    | primary_expression
     | expression
     ;
 
@@ -52,6 +54,8 @@ primary_expression : IDENTIFIER | NUMBER_LITERAL ;
 
 math_operator : ADD | SUB | MUL | DIV | MOD ;
 
+literal : INTEGER_LITERAL | FLOATING_POINT_LITERAL | STRING_LITERAL | BOOL_LITERAL ;
+eof : EOF ;
 
 //////////////////////////////////////////////////// LEXER RULES (tokens) ////////////////////////////////////////////////////
 PRINT : 'print' ;
