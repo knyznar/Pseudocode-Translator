@@ -9,48 +9,35 @@ while_statement : WHILE '(' boolean_expression  ')' '{' if_or_loop_body '}' ;
 if_or_loop_body : statement* ;
 print : PRINT LEFT_ROUND_BRACKET string RIGHT_ROUND_BRACKET  ;
 string : STRING_LITERAL ;
-type : BOOL | STRING | CHAR | INT | VOID | FLOAT ;
+type : BOOL | STRING | CHAR | INT | FLOAT ;
 variable_declaration
-    : type IDENTIFIER ASSIGN literal
+    : assignment
+    | type assignment
     | type IDENTIFIER
     ;
+assignment : IDENTIFIER ASSIGN literal | IDENTIFIER ASSIGN expression;
 for_conditions
     : IDENTIFIER '=' INTEGER_LITERAL ':' INTEGER_LITERAL    // ex. for(a = 0 : 10)
-    | IDENTIFIER '=' INTEGER_LITERAL ':' expression         // ex. for(a = 0 : b+c)
     ;
 boolean_expression
-    : expression GT expression      // ex. a+b > c+d
-    | expression LT expression
-    | expression LE expression
-    | expression GE expression
-    | expression EQUALS expression
-    | expression NOT_EQUALS expression
-    | expression GT primary_expression      // ex. a+b > 0
-    | expression LT primary_expression
-    | expression LE primary_expression
-    | expression GE primary_expression
-    | expression EQUALS primary_expression
-    | expression NOT_EQUALS primary_expression
-    | primary_expression GT primary_expression      // ex. a < b
-    | primary_expression LT primary_expression
-    | primary_expression LE primary_expression
-    | primary_expression GE primary_expression
-    | primary_expression EQUALS primary_expression
-    | primary_expression NOT_EQUALS primary_expression
-    | expression AND expression
-    | expression OR expression
-    | NOT expression
-    | primary_expression AND primary_expression
-    | primary_expression OR primary_expression
-    | NOT primary_expression
+    : expression comparison expression      // ex. a+b > c+d
+    | expression comparison primary_expression      // ex. a+b > 0
+    | primary_expression comparison primary_expression      // ex. a < b
+    | expression logic_operator expression
+    | negation
+    | primary_expression logic_operator primary_expression
     | primary_expression
     | expression
     ;
 
-expression
-    : primary_expression math_operator primary_expression (math_operator primary_expression)* ;
+comparison : GT | LT | LE | GE | EQUALS | NOT_EQUALS ;
+logic_operator : AND | OR ;
+negation : NOT expression | NOT primary_expression ;
 
-primary_expression : IDENTIFIER | NUMBER_LITERAL ;
+expression
+    : primary_expression math_operator primary_expression ;
+
+primary_expression : IDENTIFIER | FLOATING_POINT_LITERAL | INTEGER_LITERAL; // TODO check NUMBER_LITERAL???????????
 
 math_operator : ADD | SUB | MUL | DIV | MOD ;
 
@@ -74,7 +61,6 @@ FLOAT : 'float' ;
 RETURN : 'return' ;
 STRING : 'string';
 SWITCH : 'switch' ;
-VOID : 'void' ;
 LEFT_ROUND_BRACKET : '(' ;
 RIGHT_ROUND_BRACKET : ')' ;
 LEFT_BRACE : '{' ;

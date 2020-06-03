@@ -1,0 +1,25 @@
+int a = 1
+if(a==1) {
+    a=5
+    int b=10
+    print("condition met")
+} else {
+    print("condition not met")
+}
+
+for(i = 0:10) {
+    while(a+b > c+d) {
+        print("a")
+        while(not a) {
+            b = c+d
+        }
+    }
+    i = i+1
+    i = 10
+    i = a+b
+    float c
+    bool a
+    string a
+    char a
+    print("aaa")
+}

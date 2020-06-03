@@ -4,24 +4,25 @@ import translator.MarkupParser.PseudocodeLexer;
 import translator.MarkupParser.PseudocodeParser;
 import org.antlr.v4.runtime.tree.*;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+
 
 public class SimpleGrammarTest {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws IOException {
         SimpleGrammarTest simpleGrammarTest = new SimpleGrammarTest();
-        simpleGrammarTest.parse();
+        File inputFile = new File("input.txt");
+        simpleGrammarTest.parse(inputFile);
     }
-    public void parse() {
-        String exampleCode = "if(a) {\n" +
-                "int b=2 \n" +
-                "int g=5\n" +
-                "} else {\n" +
-                "int c=3\n" +
-                "}\n print(\"aaa\")\n int a=4";
-//        String exampleCode = "for(a = 0 : 10) {int a=1\nprint(\"aaa\")}";
-        PseudocodeLexer lexer = new PseudocodeLexer(new ANTLRInputStream(exampleCode));
+
+    public void parse(File file) throws IOException {
+        String input = readFile(file);
+
+        PseudocodeLexer lexer = new PseudocodeLexer(new ANTLRInputStream(input));
         CommonTokenStream commonTokenStream = new CommonTokenStream(lexer);
         PseudocodeParser parser = new PseudocodeParser(commonTokenStream);
-//        parser.setBuildParseTree(true);
 
         ParseTree tree = parser.start();
         System.out.println(tree.toStringTree());
@@ -29,5 +30,10 @@ public class SimpleGrammarTest {
 
         PVisitor pVisitor = new PVisitor();
         pVisitor.visit(tree);
+    }
+
+    private static String readFile(File file) throws IOException {
+        byte[] encoded = Files.readAllBytes(file.toPath());
+        return new String(encoded, StandardCharsets.UTF_8);
     }
 }
