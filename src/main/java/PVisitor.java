@@ -1,5 +1,3 @@
-import translator.MarkupParser.PseudocodeBaseVisitor;
-import translator.MarkupParser.PseudocodeParser;
 
 import java.io.FileWriter;
 import java.io.IOException;

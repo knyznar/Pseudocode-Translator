@@ -2,8 +2,7 @@ import org.antlr.v4.runtime.ANTLRInputStream;
 import org.antlr.v4.runtime.CommonTokenStream;
 
 import org.antlr.v4.runtime.tree.*;
-import translator.MarkupParser.PseudocodeLexer;
-import translator.MarkupParser.PseudocodeParser;
+
 
 import java.io.File;
 import java.io.IOException;
@@ -14,7 +13,7 @@ import java.nio.file.Files;
 public class Main {
     public static void main(String[] args) throws IOException {
         Main simpleGrammarTest = new Main();
-        File inputFile = new File("input.txt");
+        File inputFile = new File(args[0]);
         simpleGrammarTest.parse(inputFile);
     }
 
