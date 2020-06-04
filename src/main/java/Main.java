@@ -27,7 +27,6 @@ public class Main {
 
         ParseTree tree = parser.start();
         System.out.println(tree.toStringTree());
-        System.out.println("VISITOR:");
 
         PVisitor pVisitor = new PVisitor();
         pVisitor.visit(tree);

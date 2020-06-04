@@ -1,5 +1,3 @@
-
-
 import translator.MarkupParser.PseudocodeBaseVisitor;
 import translator.MarkupParser.PseudocodeParser;
 
@@ -12,17 +10,14 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
 
     @Override
     public String visitStart(PseudocodeParser.StartContext ctx) {
-        System.out.println("in start");
         return super.visitStart(ctx);
     }
 
     @Override
     public String visitEof(PseudocodeParser.EofContext ctx) {
-        System.out.println("visit EOF");
         if(outputCode!=null) {
-            System.out.println("close file");
             try {
-                outputCode.write("\n}");
+                outputCode.write("\n}\n}");
                 outputCode.close();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -33,10 +28,7 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
 
     @Override
     public String visitStatement(PseudocodeParser.StatementContext ctx) {
-        System.out.println("visit statement");
-
         if(outputCode==null) {
-            System.out.println("open file");
             try {
                 outputCode = new FileWriter("OutputCode.java", false);
                 outputCode.write("class OutputCode {\n" +
@@ -50,7 +42,6 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
 
     @Override
     public String visitFor_statement(PseudocodeParser.For_statementContext ctx) {
-        System.out.println("visit for stmt");
         try {
             outputCode.write(ctx.FOR().getText() + '(');
             visitFor_conditions(ctx.for_conditions());
@@ -63,7 +54,6 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 
@@ -79,7 +69,6 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
 
     @Override
     public String visitWhile_statement(PseudocodeParser.While_statementContext ctx) {
-        System.out.println("visit while");
         try {
             outputCode.write(ctx.WHILE().getText() + '(');
             visitBoolean_expression(ctx.boolean_expression());
@@ -94,24 +83,20 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
 
     @Override
     public String visitBoolean_expression(PseudocodeParser.Boolean_expressionContext ctx) {
-        System.out.println("visit boolean expr");
         return super.visitBoolean_expression(ctx);
-    }
 
-    @Override
-    public String visitNegation(PseudocodeParser.NegationContext ctx) {
-        try {
-            outputCode.write("!");
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return super.visitNegation(ctx);
     }
 
     @Override
     public String visitComparison(PseudocodeParser.ComparisonContext ctx) {
         try {
-            outputCode.write(ctx.getText());
+            if(ctx.NOT_EQUALS() != null) {
+                outputCode.write("!=");
+            } else if(ctx.EQUALS() != null) {
+                outputCode.write("==");
+            } else {
+                outputCode.write(ctx.getText());
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -120,7 +105,6 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
 
     @Override
     public String visitExpression(PseudocodeParser.ExpressionContext ctx) {
-        System.out.println("visit expression");
         visitPrimary_expression(ctx.primary_expression(0));
         visitMath_operator(ctx.math_operator());
         visitPrimary_expression(ctx.primary_expression(1));
@@ -129,7 +113,6 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
 
     @Override
     public String visitPrimary_expression(PseudocodeParser.Primary_expressionContext ctx) {
-        System.out.println("visit primary expression");
         try {
             outputCode.write(ctx.getText());
         } catch (IOException e) {
@@ -173,17 +156,19 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
     @Override
     public String visitVariable_declaration(PseudocodeParser.Variable_declarationContext ctx) {
         try {
-            if(ctx.IDENTIFIER() != null) {
+            if(ctx.type() != null) {
                 if(ctx.type().getText().equals("string"))
-                    outputCode.write("String" + " " + ctx.IDENTIFIER() + ';' + '\n');
+                    outputCode.write("String" + " ");
                 else if(ctx.type().getText().equals("bool"))
-                    outputCode.write("boolean" + " " + ctx.IDENTIFIER() + ';' + '\n');
+                    outputCode.write("boolean" + " ");
                 else
-                    outputCode.write(ctx.type().getText() + " " + ctx.IDENTIFIER() + ';' + '\n');
-                return null;
+                    outputCode.write(ctx.type().getText() + " ");
 
-            } else if(ctx.type() != null) {
-                outputCode.write(ctx.type().getText() + " ");
+                if(ctx.IDENTIFIER() != null) {
+                    outputCode.write(ctx.IDENTIFIER().getText() + ';' + '\n');
+                    return null;
+                }
+            } else {
                 visitAssignment(ctx.assignment());
                 return null;
             }
@@ -209,9 +194,10 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
 
     @Override
     public String visitIf_statement(PseudocodeParser.If_statementContext ctx) {
-        System.out.println("visit if stmt");
         try {
-            outputCode.write(ctx.IF().getText() + '(' + ctx.boolean_expression().getText() + ") {\n");
+            outputCode.write(ctx.IF().getText() + '(');
+            visitBoolean_expression(ctx.boolean_expression());
+            outputCode.write(") {\n");
             if(ctx.trueStatement != null) {
                 visitIf_or_loop_body(ctx.if_or_loop_body(0));
             }
@@ -227,7 +213,6 @@ public class PVisitor extends PseudocodeBaseVisitor<String> {
         } catch (IOException e) {
             e.printStackTrace();
         }
-
         return null;
     }
 

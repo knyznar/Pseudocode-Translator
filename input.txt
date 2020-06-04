@@ -1,25 +1,19 @@
-int a = 1
-if(a==1) {
-    a=5
-    int b=10
-    print("condition met")
-} else {
-    print("condition not met")
-}
-
+int b=0
+int c=1
+int d=2
 for(i = 0:10) {
     while(a+b > c+d) {
         print("a")
-        while(not a) {
+        while(b<=c) {
             b = c+d
         }
     }
     i = i+1
     i = 10
     i = a+b
-    float c
-    bool a
-    string a
-    char a
+    float q
+    bool w
+    string e = "Some string"
+    char r
     print("aaa")
 }

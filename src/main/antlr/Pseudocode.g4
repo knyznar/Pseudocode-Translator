@@ -1,6 +1,9 @@
 grammar Pseudocode;
 
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
 //////////////////////////////////////////////////// PARSER RULES ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 start : statement+ eof ; // root rule
 statement : if_statement | variable_declaration | print | for_statement | while_statement ;
 for_statement : FOR '(' for_conditions ')' '{' if_or_loop_body '}' ;
@@ -24,27 +27,27 @@ boolean_expression
     | expression comparison primary_expression      // ex. a+b > 0
     | primary_expression comparison primary_expression      // ex. a < b
     | expression logic_operator expression
-    | negation
     | primary_expression logic_operator primary_expression
     | primary_expression
-    | expression
     ;
 
 comparison : GT | LT | LE | GE | EQUALS | NOT_EQUALS ;
 logic_operator : AND | OR ;
-negation : NOT expression | NOT primary_expression ;
 
 expression
     : primary_expression math_operator primary_expression ;
 
-primary_expression : IDENTIFIER | FLOATING_POINT_LITERAL | INTEGER_LITERAL; // TODO check NUMBER_LITERAL???????????
+primary_expression : IDENTIFIER | FLOATING_POINT_LITERAL | INTEGER_LITERAL ;
 
 math_operator : ADD | SUB | MUL | DIV | MOD ;
 
 literal : INTEGER_LITERAL | FLOATING_POINT_LITERAL | STRING_LITERAL | BOOL_LITERAL ;
 eof : EOF ;
 
-//////////////////////////////////////////////////// LEXER RULES (tokens) ////////////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+//////////////////////////////////////////////////// LEXER RULES (tokens) ////////////////////////////////////////////
+//////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
 PRINT : 'print' ;
 ASSIGN : '=' ;
 BOOL : 'bool' ;
@@ -74,10 +77,10 @@ COLON : ':' ;
 GT : '>' ;
 LT : '<' ;
 NOT : 'not' ;
-EQUALS : '==' ;
+EQUALS : 'equals' ;
 LE : '<=' ;
 GE : '>=' ;
-NOT_EQUALS : '!=' ;
+NOT_EQUALS : 'not equals' ;
 AND : 'and' ;
 OR : 'or' ;
 
@@ -101,7 +104,7 @@ fragment FLOATING_POINT_SEPARATOR : '.' ;
 // Literals
 INTEGER_LITERAL : MINUS? DECIMAL_NUMERAL ;
 FLOATING_POINT_LITERAL : MINUS? DECIMAL_NUMERAL FLOATING_POINT_SEPARATOR DECIMAL_NUMERAL? ;
-NUMBER_LITERAL :INTEGER_LITERAL | FLOATING_POINT_LITERAL;
+NUMBER_LITERAL :INTEGER_LITERAL | FLOATING_POINT_LITERAL ;
 STRING_LITERAL : QUOTE ~('\n' | '\r' | '"')* QUOTE ;
 BOOL_LITERAL :  'true' | 'false' ;
 
